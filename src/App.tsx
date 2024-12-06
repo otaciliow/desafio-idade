@@ -11,19 +11,17 @@ interface IUserProps {
 function App() {
 
   const [userName, setUserName] = useState("");
-  const [userAge, setUserAge] = useState(0);
+  const [userAge, setUserAge] = useState("");
   const [userInfo, setUserInfo] = useState<IUserProps>();
 
-  function calcular(event: FormEvent) {
-    event.preventDefault();
+  function calcular(e: FormEvent) {
+    e.preventDefault();
 
-    let currentYear = new Date().getFullYear();
-    
-    let result = currentYear - userAge;
+    const currentYear = new Date().getFullYear();
 
     setUserInfo({
       name: userName,
-      age: result
+      age: currentYear - Number(userAge)
     });
 
   }
@@ -35,15 +33,15 @@ function App() {
         <form onSubmit={calcular} className="form-idade" id="form-idade">
 
             <label htmlFor="nome" className="form-label">Qual é o seu nome?</label>
-            <input type="text" className="form-input" id="nome" placeholder="Digite seu nome" onChange={(e) => {setUserName(e.target.value)}} required />
+            <input type="text" className="form-input" id="nome" placeholder="Digite seu nome" value={userName} onChange={(e) => {setUserName(e.target.value)}} required />
 
             <label htmlFor="ano-nascimento" className="form-label">Em que ano você nasceu?</label>
-            <input type="number" className="form-input" id="ano-nascimento" placeholder="Digite o ano de nascimento" min="1" onChange={(e) => {setUserAge(Number(e.target.value))}} />
+            <input type="number" className="form-input" id="ano-nascimento" placeholder="Digite o ano de nascimento" value={userAge} min="1" onChange={(e) => {setUserAge(e.target.value)}} />
 
           <button className="form-button">Descobrir idade</button>
         </form>
 
-        {userInfo && Object.keys(userInfo).length > 0 &&
+        {userInfo && userInfo.name !== '' &&
           <p className="info-result">{userInfo.name} você tem {userInfo.age} anos!</p>
         }
         
